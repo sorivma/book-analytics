@@ -3,6 +3,7 @@ package com.example.bookanalytics.services.impl;
 import com.example.bookanalytics.dtos.FeedBackDto;
 import com.example.bookanalytics.dtos.PurchaseDto;
 import com.example.bookanalytics.dtos.PurchaserDto;
+import com.example.bookanalytics.exceptions.NoFeedBackException;
 import com.example.bookanalytics.exceptions.NoPurchaseException;
 import com.example.bookanalytics.exceptions.NoPurchaserException;
 import com.example.bookanalytics.models.Feedback;
@@ -70,7 +71,9 @@ public class FeedBackServiceImpl implements FeedBackService<Integer> {
     @Override
     public FeedBackDto findByPurchase(PurchaseDto purchaseDto) {
         return modelMapper.map(
-                purchaseRepository.findById(purchaseDto.getId()).orElseThrow(NoPurchaseException::new).getFeedBack(),
+                Optional.ofNullable(purchaseRepository.
+                                findById(purchaseDto.getId()).orElseThrow(NoPurchaseException::new).getFeedBack())
+                        .orElseThrow(NoFeedBackException::new),
                 FeedBackDto.class);
     }
 
@@ -81,6 +84,7 @@ public class FeedBackServiceImpl implements FeedBackService<Integer> {
                 .orElseThrow(NoPurchaserException::new)
                 .getPurchaseHistory()
                 .stream()
+                .filter(purchase -> purchase.getFeedBack() != null)
                 .map(purchase -> modelMapper.map(purchase.getFeedBack(), FeedBackDto.class))
                 .collect(Collectors.toList());
     }
