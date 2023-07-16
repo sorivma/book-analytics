@@ -46,6 +46,9 @@ public class AnalyticsServiceImpl implements AnalyticsService {
             }
             genreAnalytics.add(genreAnalyticsDto);
         }
+
+        genreAnalytics.sort((Comparator.comparing(GenreAnalyticsDto::getQuantity)));
+
         return genreAnalytics;
     }
 
@@ -68,6 +71,9 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         for (Book book : books){
             bookGrades.add(new BookGradeDto(book.getName(), feedbackRepository.getAvgRating(book.getId()).orElse(0.0)));
         }
+
+        bookGrades.sort(Comparator.comparing(BookGradeDto::getGrade));
+
         return bookGrades;
     }
 
