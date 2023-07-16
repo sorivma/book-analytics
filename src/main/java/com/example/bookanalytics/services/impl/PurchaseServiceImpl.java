@@ -2,7 +2,7 @@ package com.example.bookanalytics.services.impl;
 
 import com.example.bookanalytics.dtos.PurchaseDto;
 import com.example.bookanalytics.dtos.PurchaserDto;
-import com.example.bookanalytics.exceptions.BookNotFoundException;
+import com.example.bookanalytics.exceptions.NoBookException;
 import com.example.bookanalytics.models.Book;
 import com.example.bookanalytics.models.Purchase;
 import com.example.bookanalytics.models.Purchaser;
@@ -44,10 +44,10 @@ public class PurchaseServiceImpl implements PurchaseService<Integer> {
             purchase.getPurchaser().setId(null);
         }
         if (purchase.getBook().getId() != 0) {
-            Book book = bookRepository.findById(purchase.getBook().getId()).orElseThrow(BookNotFoundException::new);
+            Book book = bookRepository.findById(purchase.getBook().getId()).orElseThrow(NoBookException::new);
             purchase.setBook(book);
         } else {
-            throw new BookNotFoundException();
+            throw new NoBookException();
         }
 
         return modelMapper.map(purchaseRepository.save(purchase), PurchaseDto.class);

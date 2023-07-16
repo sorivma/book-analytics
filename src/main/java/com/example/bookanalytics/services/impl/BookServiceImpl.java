@@ -16,10 +16,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService<Integer> {
-    @Autowired
-    private BookRepository bookRepository;
-    @Autowired
-    private ModelMapper modelMapper;
+    private final BookRepository bookRepository;
+    private final ModelMapper modelMapper;
+
+    public BookServiceImpl(BookRepository bookRepository, ModelMapper modelMapper) {
+        this.bookRepository = bookRepository;
+        this.modelMapper = modelMapper;
+    }
+
     @Override
     public BookDto addBook(BookDto bookDto) {
         Book book = modelMapper.map(bookDto, Book.class);
@@ -29,6 +33,15 @@ public class BookServiceImpl implements BookService<Integer> {
     @Override
     public Optional<BookDto> findBook(Integer id) {
         return Optional.ofNullable(modelMapper.map(bookRepository.findById(id), BookDto.class));
+    }
+
+    @Override
+    public List<BookDto> findAll() {
+        return bookRepository
+                .findAll()
+                .stream()
+                .map(book -> modelMapper.map(book, BookDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override

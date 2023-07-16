@@ -10,7 +10,12 @@ import java.util.Set;
 
 public interface BookService<ID> {
     BookDto addBook(BookDto bookDto);
+
     Optional<BookDto> findBook(ID id);
+
+    List<BookDto> findAll();
+
     List<BookDto> findPublisherBooks(String publisher);
+
     List<BookDto> findBooks(GenreDto genres);
 }

@@ -1,6 +1,7 @@
 package com.example.bookanalytics.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 
 import java.util.Set;
@@ -8,7 +9,7 @@ import java.util.Set;
 @Entity
 public class Genre extends BaseEntity {
     private String name;
-    @ManyToMany(mappedBy = "genres", targetEntity = Book.class)
+    @ManyToMany(mappedBy = "genres", targetEntity = Book.class, fetch = FetchType.EAGER)
     private Set<Book> books;
 
     protected Genre() {

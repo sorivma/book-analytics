@@ -1,30 +1,31 @@
 package com.example.bookanalytics.init;
 
-import com.example.bookanalytics.dtos.BookDto;
-import com.example.bookanalytics.dtos.GenreDto;
-import com.example.bookanalytics.dtos.PurchaseDto;
-import com.example.bookanalytics.dtos.PurchaserDto;
-import com.example.bookanalytics.models.Genre;
-import com.example.bookanalytics.services.BookService;
-import com.example.bookanalytics.services.GenreService;
-import com.example.bookanalytics.services.PurchaseService;
-import com.example.bookanalytics.services.PurchaserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.bookanalytics.dtos.*;
+import com.example.bookanalytics.repositories.BookRepository;
+import com.example.bookanalytics.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
 @Component
 public class CommandLineRunnerImpl implements CommandLineRunner {
-    @Autowired
-    private GenreService genreService;
-    @Autowired
-    private BookService bookService;
-    @Autowired
-    private PurchaseService purchaseService;
+    private final GenreService genreService;
+    private final BookService bookService;
+    private final PurchaseService purchaseService;
+    private final FeedBackService feedBackService;
+    private final AnalyticsService analyticsService;
+    private final BookRepository bookRepository;
+
+    public CommandLineRunnerImpl(GenreService genreService, BookService bookService, PurchaseService purchaseService, FeedBackService feedBackService, AnalyticsService analyticsService, BookRepository bookRepository) {
+        this.genreService = genreService;
+        this.bookService = bookService;
+        this.purchaseService = purchaseService;
+        this.feedBackService = feedBackService;
+        this.analyticsService = analyticsService;
+        this.bookRepository = bookRepository;
+    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -67,6 +68,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         bookDto3.setId(3);
 
         PurchaserDto purchaserDto = new PurchaserDto(0,"Вася", "vasya@gmail.com");
+        PurchaserDto purchaserDto1 = new PurchaserDto(0, "Ваня", "vanyok@mail.ru");
         PurchaseDto purchaseDto = new PurchaseDto(5, bookDto2, purchaserDto);
         purchaseService.purchase(purchaseDto);
 
@@ -74,14 +76,41 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         PurchaseDto purchaseDto1 = new PurchaseDto(10, bookDto1, purchaserDto);
         purchaseService.purchase(purchaseDto1);
 
-        PurchaseDto purchaseDto2 = new PurchaseDto(5, bookDto2, purchaserDto);
+        PurchaseDto purchaseDto2 = new PurchaseDto(6, bookDto2, purchaserDto);
         PurchaseDto purchaseDto3 = new PurchaseDto(6, bookDto3, purchaserDto);
+        PurchaseDto purchaseDto4 = new PurchaseDto(3, bookDto2, purchaserDto);
         purchaseService.purchase(purchaseDto2);
         purchaseService.purchase(purchaseDto3);
+        purchaseService.purchase(purchaseDto4);
 
-        purchaseService.delete(1);
-        purchaseService.delete(2);
-        purchaseService.delete(3);
-        purchaseService.delete(4);
+        PurchaseDto purchaseDto5 = new PurchaseDto(6, bookDto2, purchaserDto1);
+        PurchaseDto purchaseDto6 = new PurchaseDto(6, bookDto3, purchaserDto1);
+        PurchaseDto purchaseDto7 = new PurchaseDto(3, bookDto2, purchaserDto1);
+        purchaseService.purchase(purchaseDto5);
+        purchaserDto1.setId(2);
+        purchaseService.purchase(purchaseDto6);
+        purchaseService.purchase(purchaseDto7);
+
+        feedBackService.leaveFeedBack(
+                new FeedBackDto(0, 1, 1, 2, 3, 4, 5,
+                        "В целом все норм"));
+        feedBackService.leaveFeedBack(
+                new FeedBackDto(0, 3, 1, 1, 2, 3, 4,
+                        "Не люблю классику"));
+        feedBackService.leaveFeedBack(
+                new FeedBackDto(0, 5, 4, 4, 4, 4, 4,
+                        "Среднячок"));
+
+        System.out.println(analyticsService.analyzePurchaser(purchaserDto));
+
+        System.out.println(bookRepository.findTotalQuantity("Таинственные тайны"));
+
+        System.out.println(analyticsService.analyzePublishers());
+
+        System.out.println(bookRepository.findBestSeller("Весенние грозы"));
+
+        System.out.println(analyticsService.currentRanking());
+
+        System.out.println(analyticsService.getEmails(genreDto3, 30));
     }
 }

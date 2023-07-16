@@ -1,6 +1,7 @@
 package com.example.bookanalytics.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import org.hibernate.annotations.Cascade;
 
 import java.util.Set;
@@ -12,6 +13,7 @@ public class Purchaser extends BaseEntity{
     private String patronymic;
     private String phoneNumber;
     @Column(unique = true)
+    @Email
     private String email;
 
     @OneToMany(mappedBy = "purchaser", orphanRemoval = true, cascade = CascadeType.ALL)
@@ -74,5 +76,15 @@ public class Purchaser extends BaseEntity{
 
     public void setPurchaseHistory(Set<Purchase> purchaseHistory) {
         this.purchaseHistory = purchaseHistory;
+    }
+
+    @PreRemove
+    private void preRemove(){
+        for (Purchase purchase : purchaseHistory) {
+            if (purchase.getBook() != null) {
+                purchase.getBook().getPurchases().remove(purchase);
+                purchase.setBook(null);
+            }
+        }
     }
 }

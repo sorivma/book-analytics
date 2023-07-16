@@ -14,10 +14,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class GenreServiceImpl implements GenreService<Integer> {
-    @Autowired
-    private GenreRepository genreRepository;
-    @Autowired
-    private ModelMapper modelMapper;
+    private final GenreRepository genreRepository;
+    private final ModelMapper modelMapper;
+
+    public GenreServiceImpl(GenreRepository genreRepository, ModelMapper modelMapper) {
+        this.genreRepository = genreRepository;
+        this.modelMapper = modelMapper;
+    }
+
     @Override
     public GenreDto addGenre(GenreDto genre) {
         return modelMapper.map(

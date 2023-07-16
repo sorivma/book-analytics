@@ -14,7 +14,7 @@ public class Purchase extends BaseEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "book_id", referencedColumnName = "id", nullable = false)
     private Book book;
-    @OneToOne(mappedBy = "purchase", targetEntity = Feedback.class)
+    @OneToOne(mappedBy = "purchase", targetEntity = Feedback.class, cascade = CascadeType.ALL)
     private Feedback feedBack;
     private Date date;
     private Integer quantity;
@@ -71,11 +71,5 @@ public class Purchase extends BaseEntity {
         this.quantity = quantity;
     }
 
-    @PreRemove
-    private void preRemove(){
-        if (purchaser != null) {
-            purchaser.getPurchaseHistory().remove(this);
-            purchaser = null;
-        }
-    }
+
 }

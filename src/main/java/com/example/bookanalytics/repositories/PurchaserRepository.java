@@ -12,5 +12,4 @@ import java.util.Optional;
 public interface PurchaserRepository extends JpaRepository<Purchaser, Integer> {
     void deleteByEmail(String email);
     Optional<Purchaser> findByEmail(String email);
-    boolean existsByEmail(String email);
 }

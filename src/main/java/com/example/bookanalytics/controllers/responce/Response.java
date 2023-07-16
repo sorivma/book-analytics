@@ -1,4 +1,4 @@
-package com.example.bookanalytics.controllers;
+package com.example.bookanalytics.controllers.responce;
 
 public class Response {
     private String message;

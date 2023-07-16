@@ -10,8 +10,6 @@ public class BookDto {
     private String publisher;
     private String author;
     private Set<GenreDto> genres;
-    private Double grade;
-
     public BookDto(Integer id, String name, String publisher, String author, Set<GenreDto> genres) {
         this.id = id;
         this.name = name;
@@ -38,14 +36,6 @@ public class BookDto {
 
     public void setGenres(Set<GenreDto> genres) {
         this.genres = genres;
-    }
-
-    public Double getGrade() {
-        return grade;
-    }
-
-    public void setGrade(Double grade) {
-        this.grade = grade;
     }
 
     public Integer getId() {

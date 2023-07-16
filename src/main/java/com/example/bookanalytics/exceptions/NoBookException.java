@@ -2,8 +2,8 @@ package com.example.bookanalytics.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
 
-public class BookNotFoundException extends EntityNotFoundException {
-    public BookNotFoundException() {
+public class NoBookException extends EntityNotFoundException {
+    public NoBookException() {
         super("There is no such book");
     }
 }

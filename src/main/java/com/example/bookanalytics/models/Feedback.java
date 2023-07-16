@@ -2,15 +2,27 @@ package com.example.bookanalytics.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 @Entity
 public class Feedback extends BaseEntity {
     @OneToOne(optional = false)
     private Purchase purchase;
+    @Min(value = 0, message = "Grade should not be less than zero")
+    @Max(value = 5, message = "Grade should not be greater than five")
     private Integer paperQuality;
+    @Min(value = 0, message = "Grade should not be less than zero")
+    @Max(value = 5, message = "Grade should not be greater than five")
     private Integer plotOfBook;
+    @Min(value = 0, message = "Grade should not be less than zero")
+    @Max(value = 5, message = "Grade should not be greater than five")
     private Integer materialFeed;
+    @Min(value = 0, message = "Grade should not be less than zero")
+    @Max(value = 5, message = "Grade should not be greater than five")
     private Integer exteriorDesign;
+    @Min(value = 0, message = "Grade should not be less than zero")
+    @Max(value = 5, message = "Grade should not be greater than five")
     private Integer qualityOfDelivery;
     private String description;
 
@@ -88,5 +100,18 @@ public class Feedback extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Feedback{" +
+                "purchase=" + purchase +
+                ", paperQuality=" + paperQuality +
+                ", plotOfBook=" + plotOfBook +
+                ", materialFeed=" + materialFeed +
+                ", exteriorDesign=" + exteriorDesign +
+                ", qualityOfDelivery=" + qualityOfDelivery +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
