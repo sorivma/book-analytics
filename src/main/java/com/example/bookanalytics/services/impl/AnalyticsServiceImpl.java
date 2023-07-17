@@ -4,9 +4,9 @@ import com.example.bookanalytics.exceptions.NoGenreException;
 import com.example.bookanalytics.dtos.*;
 import com.example.bookanalytics.exceptions.NoPurchaserException;
 import com.example.bookanalytics.models.Book;
+import com.example.bookanalytics.models.BooksGenres;
 import com.example.bookanalytics.models.Genre;
 import com.example.bookanalytics.models.Purchase;
-import com.example.bookanalytics.models.Purchaser;
 import com.example.bookanalytics.repositories.*;
 import com.example.bookanalytics.services.AnalyticsService;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,12 @@ import java.util.*;
 @Service
 public class AnalyticsServiceImpl implements AnalyticsService {
     private final PurchaserRepository purchaserRepository;
-    private final PurchaseRepository purchaseRepository;
     private final BookRepository bookRepository;
     private final GenreRepository genreRepository;
     private final FeedbackRepository feedbackRepository;
 
-    public AnalyticsServiceImpl(PurchaserRepository purchaserRepository, PurchaseRepository purchaseRepository, BookRepository bookRepository, GenreRepository genreRepository, FeedbackRepository feedbackRepository) {
+    public AnalyticsServiceImpl(PurchaserRepository purchaserRepository, BookRepository bookRepository, GenreRepository genreRepository, FeedbackRepository feedbackRepository) {
         this.purchaserRepository = purchaserRepository;
-        this.purchaseRepository = purchaseRepository;
         this.bookRepository = bookRepository;
         this.genreRepository = genreRepository;
         this.feedbackRepository = feedbackRepository;
@@ -31,6 +29,11 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     public List<GenreAnalyticsDto> analyzePurchaser(PurchaserDto purchaserDto) {
+        if (!purchaserRepository.existsById(purchaserDto.getId())) {
+            throw new NoPurchaserException();
+        }
+
+
         List<Genre> genres = genreRepository.findAll();
         List<GenreAnalyticsDto> genreAnalytics = new ArrayList<>();
         for (Genre genre : genres) {
@@ -81,7 +84,8 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     public List<EmailDto> getEmails(GenreDto genreDto, Integer criteria) {
         Genre genre = genreRepository.findById(genreDto.getId()).orElseThrow(NoGenreException::new);
         Map<String, Integer> rating = new HashMap<>();
-        for (Book book : genre.getBooks()) {
+        for (BooksGenres booksGenres : genre.getBooksGenres()) {
+            Book book = booksGenres.getBook();
             for (Purchase purchase : book.getPurchases()) {
                 if (rating.containsKey(purchase.getPurchaser().getEmail())) {
                     rating.put(purchase.getPurchaser().getEmail(), rating.get(purchase.getPurchaser().getEmail()) + purchase.getQuantity());

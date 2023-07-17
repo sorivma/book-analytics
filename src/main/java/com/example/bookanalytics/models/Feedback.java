@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Feedback extends BaseEntity {
@@ -24,19 +25,13 @@ public class Feedback extends BaseEntity {
     @Min(value = 0, message = "Grade should not be less than zero")
     @Max(value = 5, message = "Grade should not be greater than five")
     private Integer qualityOfDelivery;
+    @NotBlank
     private String description;
 
     protected Feedback() {
     }
 
-    public Feedback(
-            Purchase purchase,
-            Integer paperQuality,
-            Integer plotOfBook,
-            Integer materialFeed,
-            Integer exteriorDesign,
-            Integer qualityOfDelivery,
-            String description) {
+    public Feedback(Purchase purchase, Integer paperQuality, Integer plotOfBook, Integer materialFeed, Integer exteriorDesign, Integer qualityOfDelivery, String description) {
         this.purchase = purchase;
         this.paperQuality = paperQuality;
         this.plotOfBook = plotOfBook;
@@ -104,14 +99,6 @@ public class Feedback extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Feedback{" +
-                "purchase=" + purchase +
-                ", paperQuality=" + paperQuality +
-                ", plotOfBook=" + plotOfBook +
-                ", materialFeed=" + materialFeed +
-                ", exteriorDesign=" + exteriorDesign +
-                ", qualityOfDelivery=" + qualityOfDelivery +
-                ", description='" + description + '\'' +
-                '}';
+        return "Feedback{" + "purchase=" + purchase + ", paperQuality=" + paperQuality + ", plotOfBook=" + plotOfBook + ", materialFeed=" + materialFeed + ", exteriorDesign=" + exteriorDesign + ", qualityOfDelivery=" + qualityOfDelivery + ", description='" + description + '\'' + '}';
     }
 }

@@ -2,22 +2,25 @@ package com.example.bookanalytics.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.Set;
 
 @Entity
 public class Genre extends BaseEntity {
+    @NotBlank
     private String name;
-    @ManyToMany(mappedBy = "genres", targetEntity = Book.class, fetch = FetchType.EAGER)
-    private Set<Book> books;
+    @OneToMany(mappedBy = "genre", orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<BooksGenres> booksGenres;
 
     protected Genre() {
 
     }
 
-    public Genre(String name) {
+    public Genre(String name, Set<BooksGenres> booksGenres) {
         this.name = name;
+        this.booksGenres = booksGenres;
     }
 
     public String getName() {
@@ -28,11 +31,11 @@ public class Genre extends BaseEntity {
         this.name = name;
     }
 
-    public Set<Book> getBooks() {
-        return books;
+    public Set<BooksGenres> getBooksGenres() {
+        return booksGenres;
     }
 
-    public void setBooks(Set<Book> books) {
-        this.books = books;
+    public void setBooksGenres(Set<BooksGenres> booksGenres) {
+        this.booksGenres = booksGenres;
     }
 }

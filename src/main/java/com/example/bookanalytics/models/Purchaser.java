@@ -2,14 +2,19 @@ package com.example.bookanalytics.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.Set;
 
 @Entity
 public class Purchaser extends BaseEntity{
+    @NotBlank
     private String name;
+    @NotBlank
     private String surname;
+    @NotBlank
     private String patronymic;
+    @NotBlank
     private String phoneNumber;
     @Column(unique = true)
     @Email

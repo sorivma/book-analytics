@@ -1,13 +1,12 @@
 package com.example.bookanalytics;
 
-import com.example.bookanalytics.dtos.FeedBackDto;
+import com.example.bookanalytics.dtos.GenreDto;
 import com.example.bookanalytics.dtos.PurchaseDto;
-import com.example.bookanalytics.models.Feedback;
+import com.example.bookanalytics.models.BooksGenres;
 import com.example.bookanalytics.models.Purchase;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.modelmapper.config.Configuration;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -22,13 +21,19 @@ public class BookAnalyticsApplication {
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
 
-        TypeMap<Purchase, PurchaseDto> propertyMapper = modelMapper.createTypeMap(Purchase.class, PurchaseDto.class);
-        propertyMapper.addMapping(
+        TypeMap<Purchase, PurchaseDto> purchasePropertyMapper = modelMapper.createTypeMap(Purchase.class,
+                PurchaseDto.class);
+        purchasePropertyMapper.addMapping(
                 Purchase::getBook, PurchaseDto::setBookDto
         );
-        propertyMapper.addMapping(
+        purchasePropertyMapper.addMapping(
                 Purchase::getPurchaser, PurchaseDto::setPurchaserDto
         );
+
+        TypeMap<BooksGenres, GenreDto> genrePropertyMapper = modelMapper.createTypeMap(BooksGenres.class,
+                GenreDto.class);
+        genrePropertyMapper.addMapping(booksGenres -> booksGenres.getGenre().getName(), GenreDto::setName);
+        genrePropertyMapper.addMapping(booksGenres -> booksGenres.getGenre().getId(), GenreDto::setId);
 
         return modelMapper;
     }

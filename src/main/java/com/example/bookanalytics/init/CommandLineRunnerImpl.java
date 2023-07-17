@@ -6,7 +6,10 @@ import com.example.bookanalytics.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 
 @Component
@@ -32,7 +35,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         seedData();
     }
 
-    private void seedData(){
+    private void seedData() {
         GenreDto genreDto1 = new GenreDto(0, "Отечественная классика");
         GenreDto genreDto2 = new GenreDto(0, "Фэнтези");
         GenreDto genreDto3 = new GenreDto(0, "Роман");
@@ -51,9 +54,9 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         genreDto3.setId(3);
         genreDto4.setId(4);
 
-        BookDto bookDto1 = new BookDto(0, "Преступление и наказание", "Весенние грозы", "Ф.М. Достоевский", new HashSet<>(Arrays.asList(genreDto1, genreDto3)));
-        BookDto bookDto2 = new BookDto(0, "Война и мир", "Весенние грозы", "Л.Н. Толстой", new HashSet<>(Arrays.asList(genreDto1, genreDto3, genreDto4)));
-        BookDto bookDto3 = new BookDto(0, "Мастер и маргарита", "Таинственные тайны", "М.А Булгаков",new HashSet<>(Arrays.asList(genreDto1, genreDto2, genreDto3)));
+        BookDto bookDto1 = new BookDto(0, "Преступление и наказание", "Весенние грозы", "Ф.М. Достоевский", new HashSet<>(Arrays.asList(genreDto1, genreDto3)), "2003");
+        BookDto bookDto2 = new BookDto(0, "Война и мир", "Весенние грозы", "Л.Н. Толстой", new HashSet<>(Arrays.asList(genreDto1, genreDto3, genreDto4)), "1997");
+        BookDto bookDto3 = new BookDto(0, "Мастер и маргарита", "Таинственные тайны", "М.А Булгаков", new HashSet<>(Arrays.asList(genreDto1, genreDto2, genreDto3)), "2010");
 
         bookService.addBook(bookDto1);
         bookService.addBook(bookDto2);
@@ -67,25 +70,26 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         bookDto2.setId(2);
         bookDto3.setId(3);
 
-        PurchaserDto purchaserDto = new PurchaserDto(0,"Вася", "vasya@gmail.com");
-        PurchaserDto purchaserDto1 = new PurchaserDto(0, "Ваня", "vanyok@mail.ru");
-        PurchaseDto purchaseDto = new PurchaseDto(5, bookDto2, purchaserDto);
+        PurchaserDto purchaserDto = new PurchaserDto(0, "Вася", "Неустроев", "Алексеевич", "+79774932201", "vasya@gmail.com");
+        PurchaserDto purchaserDto1 = new PurchaserDto(0, "Ваня", "Рябцев", "Дмитриевич", "+79165024322", "vanyok@mail.ru");
+        Date date = new Date();
+        PurchaseDto purchaseDto = new PurchaseDto(0, 5, bookDto2, purchaserDto, date);
         purchaseService.purchase(purchaseDto);
 
         purchaserDto.setId(1);
-        PurchaseDto purchaseDto1 = new PurchaseDto(10, bookDto1, purchaserDto);
+        PurchaseDto purchaseDto1 = new PurchaseDto(0, 10, bookDto1, purchaserDto, date);
         purchaseService.purchase(purchaseDto1);
 
-        PurchaseDto purchaseDto2 = new PurchaseDto(6, bookDto2, purchaserDto);
-        PurchaseDto purchaseDto3 = new PurchaseDto(6, bookDto3, purchaserDto);
-        PurchaseDto purchaseDto4 = new PurchaseDto(3, bookDto2, purchaserDto);
+        PurchaseDto purchaseDto2 = new PurchaseDto(0, 6, bookDto2, purchaserDto, date);
+        PurchaseDto purchaseDto3 = new PurchaseDto(0, 6, bookDto3, purchaserDto, date);
+        PurchaseDto purchaseDto4 = new PurchaseDto(0, 3, bookDto2, purchaserDto, date);
         purchaseService.purchase(purchaseDto2);
         purchaseService.purchase(purchaseDto3);
         purchaseService.purchase(purchaseDto4);
 
-        PurchaseDto purchaseDto5 = new PurchaseDto(6, bookDto2, purchaserDto1);
-        PurchaseDto purchaseDto6 = new PurchaseDto(6, bookDto3, purchaserDto1);
-        PurchaseDto purchaseDto7 = new PurchaseDto(3, bookDto2, purchaserDto1);
+        PurchaseDto purchaseDto5 = new PurchaseDto(0, 6, bookDto2, purchaserDto1, date);
+        PurchaseDto purchaseDto6 = new PurchaseDto(0, 6, bookDto3, purchaserDto1, date);
+        PurchaseDto purchaseDto7 = new PurchaseDto(0, 3, bookDto2, purchaserDto1, date);
         purchaseService.purchase(purchaseDto5);
         purchaserDto1.setId(2);
         purchaseService.purchase(purchaseDto6);

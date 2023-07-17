@@ -1,41 +1,42 @@
 package com.example.bookanalytics.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.annotations.Cascade;
 
-import java.time.Year;
 import java.util.Set;
 
 @Entity
 public class Book extends BaseEntity {
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String author;
+    @NotEmpty
     private String publisher;
     @Column(name = "year_of_publication")
-    private Year year;
+    @NotEmpty
+    private String year;
 
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Set<Purchase> purchases;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "book_genre",
-            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id",
-                    referencedColumnName = "id"))
-    private Set<Genre> genres;
+
+    @OneToMany(mappedBy = "book", orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<BooksGenres> booksGenres;
 
     protected Book() {
 
     }
 
-    public Book(String name, String author, String publisher, Year year, Set<Purchase> purchases, Set<Genre> genres) {
+    public Book(String name, String author, String publisher, String year, Set<Purchase> purchases, Set<BooksGenres> booksGenres) {
         this.name = name;
         this.author = author;
         this.publisher = publisher;
         this.year = year;
         this.purchases = purchases;
-        this.genres = genres;
+        this.booksGenres = booksGenres;
     }
 
     public String getName() {
@@ -62,20 +63,21 @@ public class Book extends BaseEntity {
         this.publisher = publisher;
     }
 
-    public Year getYear() {
+
+    public String getYear() {
         return year;
     }
 
-    public void setYear(Year year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
-    public Set<Genre> getGenres() {
-        return genres;
+    public Set<BooksGenres> getBooksGenres() {
+        return booksGenres;
     }
 
-    public void setGenres(Set<Genre> genres) {
-        this.genres = genres;
+    public void setBooksGenres(Set<BooksGenres> booksGenres) {
+        this.booksGenres = booksGenres;
     }
 
     public Set<Purchase> getPurchases() {

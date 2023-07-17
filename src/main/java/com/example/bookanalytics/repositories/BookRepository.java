@@ -12,7 +12,7 @@ import java.util.Set;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Integer> {
     List<Book> findAllByPublisher(String publisher);
-    @Query("select b from Book b join b.genres g where g = :genres")
+    @Query("select b from Book b join b.booksGenres bg join bg.genre g where g = :genres")
     List<Book> findAllByGenre(Genre genres);
 
     @Query("select distinct b.publisher from Book b")

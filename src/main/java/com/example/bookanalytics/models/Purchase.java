@@ -1,6 +1,10 @@
 package com.example.bookanalytics.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 
@@ -11,13 +15,19 @@ import java.util.Date;
 public class Purchase extends BaseEntity {
     @ManyToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "purchaser_id", referencedColumnName = "id", nullable = false)
+    @NotNull
     private Purchaser purchaser;
     @ManyToOne(optional = false)
     @JoinColumn(name = "book_id", referencedColumnName = "id", nullable = false)
+    @NotNull
     private Book book;
     @OneToOne(mappedBy = "purchase", targetEntity = Feedback.class, cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Feedback feedBack;
+    @NotNull
+    @PastOrPresent
+    @Temporal(TemporalType.DATE)
     private Date date;
+    @Min(0)
     private Integer quantity;
 
     protected Purchase() {
